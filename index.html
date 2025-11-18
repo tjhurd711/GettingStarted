@@ -129,6 +129,12 @@
             gap: 10px;
             margin-bottom: 15px;
             align-items: start;
+            width: 100%;
+        }
+        
+        .contributor-entry input {
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .contributor-entry input {
@@ -285,6 +291,11 @@
             .header h1 {
                 font-size: 24px;
             }
+            
+            /* Stack deceased name fields on mobile */
+            .form-group > div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+            }
 
             .contributor-entry {
                 grid-template-columns: 1fr;
@@ -316,29 +327,29 @@
                     Name of the person being honored in this memorial 
                     <span class="required">*</span>
                 </label>
-                <div style="display: grid; grid-template-columns: 1fr 0.7fr 1fr 0.5fr; gap: 10px; margin-top: 10px;">
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr 1.2fr 0.6fr; gap: 10px; margin-top: 10px; width: 100%;">
                     <input type="text" 
                            id="deceasedFirstName" 
                            name="deceasedFirstName" 
                            placeholder="First Name" 
                            required
-                           style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px;">
+                           style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px; width: 100%; box-sizing: border-box;">
                     <input type="text" 
                            id="deceasedMiddleName" 
                            name="deceasedMiddleName" 
-                           placeholder="Middle (optional)"
-                           style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px;">
+                           placeholder="Middle"
+                           style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px; width: 100%; box-sizing: border-box;">
                     <input type="text" 
                            id="deceasedLastName" 
                            name="deceasedLastName" 
                            placeholder="Last Name" 
                            required
-                           style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px;">
+                           style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px; width: 100%; box-sizing: border-box;">
                     <input type="text" 
                            id="deceasedSuffix" 
                            name="deceasedSuffix" 
-                           placeholder="Suffix (Jr, Sr)"
-                           style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px;">
+                           placeholder="Jr, Sr"
+                           style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px; width: 100%; box-sizing: border-box;">
                 </div>
             </div>
 
@@ -434,7 +445,7 @@
         const DL_LINK = urlParams.get('DLLink') || ''; // Download link from Wix
 
         // Lambda endpoint - YOU'LL REPLACE THIS WITH YOUR ACTUAL LAMBDA URL
-        const LAMBDA_ENDPOINT = 'https://2igrpk2dhe.execute-api.us-east-2.amazonaws.com/default/memorial-send-invites';
+        const LAMBDA_ENDPOINT = 'YOUR_LAMBDA_URL_HERE';
 
         // JotForm URLs - REPLACE THESE WITH YOUR ACTUAL JOTFORM URLS
         const MAIN_UPLOADER_JOTFORM = 'https://form.jotform.com/252456612698164';
