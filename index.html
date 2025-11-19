@@ -477,13 +477,30 @@
                         if (contributorCount === 0) {
                             addContributor();
                         }
+                        // Enable required validation for contributor fields
+                        setContributorFieldsRequired(true);
                     } else {
                         contributorSection.classList.add('hidden');
+                        // Disable required validation for contributor fields
+                        setContributorFieldsRequired(false);
                     }
                 }
             });
         });
 
+        // Enable/disable required attribute on contributor fields
+        function setContributorFieldsRequired(isRequired) {
+            const contributorSection = document.getElementById('contributorSection');
+            const inputs = contributorSection.querySelectorAll('input[type="text"], input[type="email"]');
+            inputs.forEach(input => {
+                if (isRequired) {
+                    input.setAttribute('required', 'required');
+                } else {
+                    input.removeAttribute('required');
+                }
+            });
+        }
+        
         // Add contributor function
         function addContributor() {
             contributorCount++;
