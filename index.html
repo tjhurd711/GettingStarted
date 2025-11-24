@@ -346,6 +346,84 @@
         textarea:hover {
             border-color: #3b82f6;
         }
+
+        /* Already Processing Modal */
+        #alreadyProcessingModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .already-processing-content {
+            background: white;
+            border-radius: 16px;
+            padding: 50px 60px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            margin: 20px;
+        }
+
+        .already-processing-content .icon-large {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .already-processing-content h2 {
+            color: #1e3c72;
+            font-size: 26px;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .already-processing-content p {
+            color: #6c757d;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .already-processing-content .support-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .already-processing-content .support-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.4);
+        }
+
+        /* Initial loading state */
+        #initialLoadingState {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        #initialLoadingState .spinner {
+            width: 60px;
+            height: 60px;
+            border-width: 5px;
+        }
+
+        #initialLoadingState p {
+            color: #6c757d;
+            font-size: 18px;
+            margin-top: 20px;
+        }
         
         /* Responsive */
         @media (max-width: 600px) {
@@ -373,140 +451,172 @@
             .sms-checkbox-label {
                 grid-column: 1;
             }
+
+            .already-processing-content {
+                padding: 40px 30px;
+            }
+
+            .already-processing-content h2 {
+                font-size: 22px;
+            }
+
+            .already-processing-content .icon-large {
+                font-size: 50px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="mainContainer">
         <!-- Logo Section -->
         <div style="text-align: center; margin: -50px -50px 30px -50px; padding: 30px; background: white; border-radius: 20px 20px 0 0;">
             <img src="https://www.dropbox.com/scl/fi/i5ye9vg5wzfvxwyrwczq6/Untitled-940-x-600-px-1400-x-600-px.png?rlkey=rk5t9ot5gchvjcqx71lwiln1o&st=6szyks34&raw=1" 
                  alt="MemorialVideo.AI Logo" 
                  style="max-width: 400px; width: 100%; height: auto; display: block; margin: 0 auto;">
         </div>
-        
-        <div class="header">
-            <h1>📸 Photo Upload Setup</h1>
-            <p>Let's get your photos together and age sorted! Answer a couple quick questions to get started.</p>
-        </div>
 
-        <div id="errorMessage" class="error-message"></div>
-
-        <form id="uploadForm">
-            <!-- Deceased Name Fields -->
-            <div class="form-group">
-                <label>
-                    Name of the person being honored in this memorial 
-                    <span class="required">*</span>
-                </label>
-                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr 1.2fr 0.6fr; gap: 10px; margin-top: 10px; width: 100%;">
-                    <input type="text" 
-                           id="deceasedFirstName" 
-                           name="deceasedFirstName" 
-                           placeholder="First Name" 
-                           required>
-                    <input type="text" 
-                           id="deceasedMiddleName" 
-                           name="deceasedMiddleName" 
-                           placeholder="Middle">
-                    <input type="text" 
-                           id="deceasedLastName" 
-                           name="deceasedLastName" 
-                           placeholder="Last Name" 
-                           required>
-                    <input type="text" 
-                           id="deceasedSuffix" 
-                           name="deceasedSuffix" 
-                           placeholder="Jr, Sr">
-                </div>
-            </div>
-
-            <!-- Question 1: Invite Others -->
-            <div class="form-group">
-                <label>
-                    Would you like to invite others to directly upload contributing Photo Memories? 
-                    <span class="required">*</span>
-                </label>
-                <div class="radio-group">
-                    <label class="radio-option" data-value="yes-invite">
-                        <input type="radio" name="inviteOthers" value="yes" required>
-                        <span class="radio-option-content">
-                            <span class="radio-option-text">Yes, please send upload links to the memory contributors designated below</span>
-                        </span>
-                    </label>
-                    <label class="radio-option" data-value="no-invite">
-                        <input type="radio" name="inviteOthers" value="no">
-                        <span class="radio-option-content">
-                            <span class="radio-option-text">No, I will consolidate memories and upload photos for this memorial myself</span>
-                        </span>
-                    </label>
-                </div>
-            </div>
-
-<!-- Contributor Contact Info (conditional) -->
-            <div id="contributorSection" class="hidden">
-                <h3>👥 Memory Contributors</h3>
-                <p style="color: #6c757d; margin-bottom: 20px; font-size: 14px;">
-                    Add the names and email addresses of people you'd like to invite to upload photos.
-                </p>
-                
-                <div id="contributorList">
-                    <!-- Contributors will be added here dynamically -->
-                </div>
-                <button type="button" class="add-contributor-btn" id="addContributorBtn">
-                    + Add Another Contributor
-                </button>
-                
-                <!-- NEW: Personal Message Box -->
-                <div style="margin-top: 25px;">
-                    <label style="display: block; font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">
-                        Personal Message (Optional)
-                    </label>
-                    <textarea id="personalMessage" 
-                              name="personalMessage" 
-                              rows="5" 
-                              placeholder="We would love to add your favorite 10 photos of [Loved One Name]..."
-                              style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 15px; font-family: inherit; resize: vertical; transition: all 0.2s ease;"></textarea>
-                    <small style="color: #6c757d; font-size: 13px; line-height: 1.5;">
-                        <strong>💡 Tip:</strong> It is recommended that you request memories from a special part of the life you are honoring (if helpful) AND provide a memory count guideline to help you remain within 250 images overall. For example: "We would love to add your favorite 10 photos of {Loved One Name}"
-                    </small>
-                </div>
-            </div>
-            
-            <!-- Question 2: Ready to Upload -->
-            <div class="form-group">
-                <label>
-                    Are you ready to upload your photos now? 
-                    <span class="required">*</span>
-                </label>
-                <div class="radio-group">
-                    <label class="radio-option" data-value="yes-ready">
-                        <input type="radio" name="readyToUpload" value="yes" required>
-                        <span class="radio-option-content">
-                            <span class="radio-option-text">Yes, I'm ready to upload my photos</span>
-                        </span>
-                    </label>
-                    <label class="radio-option" data-value="no-ready">
-                        <input type="radio" name="readyToUpload" value="no">
-                        <span class="radio-option-content">
-                            <span class="radio-option-text">No, please send me a photo upload link that I can use when I have my photos ready</span>
-                        </span>
-                    </label>
-                </div>
-            </div>
-            <button type="submit" class="submit-btn">Continue</button>
-        </form>
-
-        <!-- Loading state (hidden by default) -->
-        <div id="loadingState" class="loading hidden">
+        <!-- Initial Loading State -->
+        <div id="initialLoadingState">
             <div class="spinner"></div>
-            <p style="color: #6c757d;">Processing your request...</p>
+            <p>Loading your order...</p>
         </div>
+        
+        <!-- Main Form Content (hidden until check completes) -->
+        <div id="formContent" class="hidden">
+            <div class="header">
+                <h1>📸 Photo Upload Setup</h1>
+                <p>Let's get your photos together and age sorted! Answer a couple quick questions to get started.</p>
+            </div>
 
-        <!-- Success state (hidden by default) -->
-        <div id="successState" class="success-message hidden">
-            <h2>✅ All Set!</h2>
-            <p id="successMessage"></p>
+            <div id="errorMessage" class="error-message"></div>
+
+            <form id="uploadForm">
+                <!-- Deceased Name Fields -->
+                <div class="form-group">
+                    <label>
+                        Name of the person being honored in this memorial 
+                        <span class="required">*</span>
+                    </label>
+                    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr 1.2fr 0.6fr; gap: 10px; margin-top: 10px; width: 100%;">
+                        <input type="text" 
+                               id="deceasedFirstName" 
+                               name="deceasedFirstName" 
+                               placeholder="First Name" 
+                               required>
+                        <input type="text" 
+                               id="deceasedMiddleName" 
+                               name="deceasedMiddleName" 
+                               placeholder="Middle">
+                        <input type="text" 
+                               id="deceasedLastName" 
+                               name="deceasedLastName" 
+                               placeholder="Last Name" 
+                               required>
+                        <input type="text" 
+                               id="deceasedSuffix" 
+                               name="deceasedSuffix" 
+                               placeholder="Jr, Sr">
+                    </div>
+                </div>
+
+                <!-- Question 1: Invite Others -->
+                <div class="form-group">
+                    <label>
+                        Would you like to invite others to directly upload contributing Photo Memories? 
+                        <span class="required">*</span>
+                    </label>
+                    <div class="radio-group">
+                        <label class="radio-option" data-value="yes-invite">
+                            <input type="radio" name="inviteOthers" value="yes" required>
+                            <span class="radio-option-content">
+                                <span class="radio-option-text">Yes, please send upload links to the memory contributors designated below</span>
+                            </span>
+                        </label>
+                        <label class="radio-option" data-value="no-invite">
+                            <input type="radio" name="inviteOthers" value="no">
+                            <span class="radio-option-content">
+                                <span class="radio-option-text">No, I will consolidate memories and upload photos for this memorial myself</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Contributor Contact Info (conditional) -->
+                <div id="contributorSection" class="hidden">
+                    <h3>👥 Memory Contributors</h3>
+                    <p style="color: #6c757d; margin-bottom: 20px; font-size: 14px;">
+                        Add the names and email addresses of people you'd like to invite to upload photos.
+                    </p>
+                    
+                    <div id="contributorList">
+                        <!-- Contributors will be added here dynamically -->
+                    </div>
+                    <button type="button" class="add-contributor-btn" id="addContributorBtn">
+                        + Add Another Contributor
+                    </button>
+                    
+                    <!-- NEW: Personal Message Box -->
+                    <div style="margin-top: 25px;">
+                        <label style="display: block; font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">
+                            Personal Message (Optional)
+                        </label>
+                        <textarea id="personalMessage" 
+                                  name="personalMessage" 
+                                  rows="5" 
+                                  placeholder="We would love to add your favorite 10 photos of [Loved One Name]..."
+                                  style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 15px; font-family: inherit; resize: vertical; transition: all 0.2s ease;"></textarea>
+                        <small style="color: #6c757d; font-size: 13px; line-height: 1.5;">
+                            <strong>💡 Tip:</strong> It is recommended that you request memories from a special part of the life you are honoring (if helpful) AND provide a memory count guideline to help you remain within 250 images overall. For example: "We would love to add your favorite 10 photos of {Loved One Name}"
+                        </small>
+                    </div>
+                </div>
+                
+                <!-- Question 2: Ready to Upload -->
+                <div class="form-group">
+                    <label>
+                        Are you ready to upload your photos now? 
+                        <span class="required">*</span>
+                    </label>
+                    <div class="radio-group">
+                        <label class="radio-option" data-value="yes-ready">
+                            <input type="radio" name="readyToUpload" value="yes" required>
+                            <span class="radio-option-content">
+                                <span class="radio-option-text">Yes, I'm ready to upload my photos</span>
+                            </span>
+                        </label>
+                        <label class="radio-option" data-value="no-ready">
+                            <input type="radio" name="readyToUpload" value="no">
+                            <span class="radio-option-content">
+                                <span class="radio-option-text">No, please send me a photo upload link that I can use when I have my photos ready</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Continue</button>
+            </form>
+
+            <!-- Loading state (hidden by default) -->
+            <div id="loadingState" class="loading hidden">
+                <div class="spinner"></div>
+                <p style="color: #6c757d;">Processing your request...</p>
+            </div>
+
+            <!-- Success state (hidden by default) -->
+            <div id="successState" class="success-message hidden">
+                <h2>✅ All Set!</h2>
+                <p id="successMessage"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Already Processing Modal -->
+    <div id="alreadyProcessingModal">
+        <div class="already-processing-content">
+            <div class="icon-large">⏳</div>
+            <h2>Your Age-Sorted Photos Are Already Being Processed</h2>
+            <p>We've already started working on your order.</p>
+            <p>You'll receive an email notification when everything is ready.</p>
+            <a href="mailto:support@memorialvideo.ai" class="support-link">Contact Support</a>
         </div>
     </div>
 
@@ -519,15 +629,54 @@
         const TYPE = urlParams.get('type') || 'memorial_video'; // presentation type
         const DL_LINK = urlParams.get('DLLink') || ''; // Download link from Wix
 
-        // Lambda endpoint - YOU'LL REPLACE THIS WITH YOUR ACTUAL LAMBDA URL
+        // Lambda endpoints
         const LAMBDA_ENDPOINT = 'https://ghrjpvcy4irl3okvg2oq6podtq0irrsh.lambda-url.us-east-2.on.aws/';
+        const PROCESSING_STATUS_LAMBDA_URL = 'https://36wayjplzjfksc3l3rueskw4ui0rjpqe.lambda-url.us-east-2.on.aws/';
 
-        // JotForm URLs - REPLACE THESE WITH YOUR ACTUAL JOTFORM URLS
+        // JotForm URLs
         const MAIN_UPLOADER_JOTFORM = 'https://form.jotform.com/252456612698164';
         const CONTRIBUTOR_UPLOADER_JOTFORM = 'https://form.jotform.com/253197023932154';
 
         // Track contributors
         let contributorCount = 0;
+
+        // Check if already processing on page load
+        async function checkIfAlreadyProcessing() {
+            if (!UID || UID === 'TEST-UID') return false;
+            
+            try {
+                const response = await fetch(`${PROCESSING_STATUS_LAMBDA_URL}?uid=${UID}`);
+                const data = await response.json();
+                return data.exists === true;
+            } catch (error) {
+                console.error('Error checking processing status:', error);
+                return false; // If check fails, allow them to proceed
+            }
+        }
+
+        // Show already processing modal
+        function showAlreadyProcessingModal() {
+            document.getElementById('alreadyProcessingModal').style.display = 'flex';
+            document.getElementById('mainContainer').style.display = 'none';
+        }
+
+        // Initialize page
+        async function initializePage() {
+            // Check if already processing
+            const alreadyProcessing = await checkIfAlreadyProcessing();
+            
+            if (alreadyProcessing) {
+                showAlreadyProcessingModal();
+                return; // Stop here, don't show form
+            }
+
+            // Hide loading, show form
+            document.getElementById('initialLoadingState').classList.add('hidden');
+            document.getElementById('formContent').classList.remove('hidden');
+        }
+
+        // Run initialization
+        initializePage();
 
         // Radio button selection styling
         document.querySelectorAll('.radio-option').forEach(option => {
