@@ -450,7 +450,8 @@
     <div class="container" id="mainContainer">
         <!-- Logo Section -->
         <div style="text-align: center; margin: -50px -50px 30px -50px; padding: 30px; background: white; border-radius: 20px 20px 0 0;">
-            <img src="https://www.dropbox.com/scl/fi/i5ye9vg5wzfvxwyrwczq6/Untitled-940-x-600-px-1400-x-600-px.png?rlkey=rk5t9ot5gchvjcqx71lwiln1o&st=6szyks34&raw=1" 
+            <img id="siteLogo"
+                 src="https://www.dropbox.com/scl/fi/i5ye9vg5wzfvxwyrwczq6/Untitled-940-x-600-px-1400-x-600-px.png?rlkey=rk5t9ot5gchvjcqx71lwiln1o&st=6szyks34&raw=1" 
                  alt="MemorialVideo.AI Logo" 
                  style="max-width: 400px; width: 100%; height: auto; display: block; margin: 0 auto;">
         </div>
@@ -608,6 +609,12 @@
         const CUSTOMER_NAME = urlParams.get('name') || 'Customer';
         const TYPE = urlParams.get('type') || 'memorial_video'; // presentation type
         const DL_LINK = urlParams.get('DLLink') || ''; // Download link from Wix
+
+        // Swap logo for File_Only (sortbyage)
+        if (TYPE === 'File_Only') {
+            document.getElementById('siteLogo').src = 'https://www.dropbox.com/scl/fi/22w5xw6t5keu6pa1cn8c5/Screenshot-2025-12-02-at-11.49.41-AM.png?rlkey=ev1s30l8q7dole5rd37i6z5xe&st=reqrcaww&raw=1';
+            document.getElementById('siteLogo').alt = 'SortByAge Logo';
+        }
 
         // Lambda endpoints
         const LAMBDA_ENDPOINT = 'https://ghrjpvcy4irl3okvg2oq6podtq0irrsh.lambda-url.us-east-2.on.aws/';
